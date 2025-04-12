@@ -6,27 +6,32 @@ async function main() {
   // Get the contract factory
   const Arbitrage = await hre.ethers.getContractFactory("Arbitrage");
 
-  // Deploy with constructor parameters
-  // Note: Replace these addresses with actual testnet/mainnet addresses
-  const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955"; // BSC USDT
-  const PANCAKESWAP_ROUTER = "0x13f4EA83D0bd40E75C8222255bc855a974568Dd4"; // PancakeSwap V3 Router
-  const THENA_ROUTER = "0x0000000000000000000000000000000000000000"; // Replace with actual Thena router
-  const OPENOCEAN_ROUTER = "0x0000000000000000000000000000000000000000"; // Replace with actual OpenOcean router
+  // Load addresses from environment variables
+  const USDT_ADDRESS = process.env.USDT_ADDRESS;
+  const PANCAKESWAP_ROUTER = process.env.PANCAKESWAP_ROUTER;
+  const THENA_ROUTER = process.env.THENA_ROUTER;
+  const OPENOCEAN_ROUTER = process.env.OPENOCEAN_ROUTER;
+  const AAVE_POOL_ADDRESS = process.env.AAVE_POOL_ADDRESS;  // Add the Aave Pool address
 
+  console.log(`Deploying with the following parameters:
+    USDT_ADDRESS: ${USDT_ADDRESS}
+    PANCAKESWAP_ROUTER: ${PANCAKESWAP_ROUTER}
+    THENA_ROUTER: ${THENA_ROUTER}
+    OPENOCEAN_ROUTER: ${OPENOCEAN_ROUTER}
+    AAVE_POOL_ADDRESS: ${AAVE_POOL_ADDRESS}`);
+
+  // Deploy the Arbitrage contract
   const arbitrage = await Arbitrage.deploy(
     USDT_ADDRESS,
     PANCAKESWAP_ROUTER,
     THENA_ROUTER,
-    OPENOCEAN_ROUTER
+    OPENOCEAN_ROUTER,
+    AAVE_POOL_ADDRESS  // Pass the Aave Pool address here
   );
 
   await arbitrage.deployed();
 
   console.log("Arbitrage contract deployed to:", arbitrage.address);
-  console.log("USDT address:", USDT_ADDRESS);
-  console.log("PancakeSwap Router:", PANCAKESWAP_ROUTER);
-  console.log("Thena Router:", THENA_ROUTER);
-  console.log("OpenOcean Router:", OPENOCEAN_ROUTER);
 }
 
 // Handle errors

@@ -30,20 +30,20 @@ contract Arbitrage is IFlashLoanReceiver {
     // Declare the path array globally to avoid "undeclared identifier"
     address[] private path;
 
-    constructor(
-        address _USDT,
-        address _pancakeSwapV3Router,
-        address _thenaFusionRouter,
-        address _openOceanRouter,
-        address _aavePool
-    ) {
-        owner = msg.sender;
-        USDT = IERC20(_USDT);
-        pancakeSwapV3Router = IPancakeRouter(_pancakeSwapV3Router);
-        thenaFusionRouter = IThenaRouter(_thenaFusionRouter);
-        openOceanRouter = IOpenOceanRouter(_openOceanRouter);
-        aavePool = IAavePool(_aavePool);
-    }
+   constructor(
+    address _USDT,
+    address _pancakeSwapV3Router,
+    address _thenaFusionRouter,
+    address _openOceanRouter,
+    address _aavePool
+) {
+    owner = msg.sender;
+    USDT = IERC20(_USDT);
+    pancakeSwapV3Router = IPancakeRouter(_pancakeSwapV3Router);
+    thenaFusionRouter = IThenaRouter(_thenaFusionRouter);
+    openOceanRouter = IOpenOceanRouter(_openOceanRouter);
+    aavePool = IAavePool(_aavePool);
+}
 
     // Update token addresses for testing
     function updateTokenAddresses(address _WBNB, address _BUSD) external {
