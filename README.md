@@ -22,12 +22,14 @@ A Solidity smart contract for executing flashloan-based arbitrage trades across 
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd flashloan-arbitrage
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
@@ -35,6 +37,7 @@ npm install
 ## Configuration
 
 1. Create a `.env` file in the root directory:
+
 ```env
 PRIVATE_KEY=your_private_key_here
 BSC_RPC_URL=your_bsc_node_url_here
@@ -45,11 +48,14 @@ BSC_RPC_URL=your_bsc_node_url_here
 ## Testing
 
 Run the test suite:
+
 ```bash
 npm run test
+npx hardhat run scripts/deploy.js --network mainnet
 ```
 
 The tests cover:
+
 - Contract deployment
 - Flash loan execution
 - Token swaps
@@ -88,6 +94,7 @@ The tests cover:
 ## Gas Optimization
 
 The contract includes several gas optimization features:
+
 - Efficient path management
 - Minimal state variables
 - Optimized approval handling
