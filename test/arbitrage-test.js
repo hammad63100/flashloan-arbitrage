@@ -179,13 +179,51 @@ describe("Arbitrage Contract", function () {
             await expect(arbitrage.swapOnPancakeSwap(0))
                 .to.be.revertedWith("Amount must be greater than 0");
         });
+    });
+
+    describe("Token Swaps Edge Cases", function () {
+        beforeEach(async function () {
+            // Get signers
+            [owner, user] = await ethers.getSigners();
+
+            // Deploy mock contracts
+            const MockERC20 = await ethers.getContractFactory("MockERC20");
+            usdt = await MockERC20.deploy("USDT", "USDT", 18);
+            wbnb = await MockERC20.deploy("WBNB", "WBNB", 18);
+            busd = await MockERC20.deploy("BUSD", "BUSD", 18);
+
+            const MockPancakeRouter = await ethers.getContractFactory("MockPancakeRouter");
+            pancakeRouter = await MockPancakeRouter.deploy();
+
+            const MockThenaRouter = await ethers.getContractFactory("MockThenaRouter");
+            thenaRouter = await MockThenaRouter.deploy();
+
+            const MockOpenOceanRouter = await ethers.getContractFactory("MockOpenOceanRouter");
+            openOceanRouter = await MockOpenOceanRouter.deploy();
+
+            const MockAavePool = await ethers.getContractFactory("MockAavePool");
+            aavePool = await MockAavePool.deploy();
+
+            // Deploy Arbitrage contract
+            const Arbitrage = await ethers.getContractFactory("Arbitrage");
+            arbitrage = await Arbitrage.deploy(
+                await usdt.getAddress(),
+                await pancakeRouter.getAddress(),
+                await thenaRouter.getAddress(),
+                await openOceanRouter.getAddress(),
+                await aavePool.getAddress()
+            );
+
+            // Update token addresses in the contract
+            await arbitrage.updateTokenAddresses(
+                await wbnb.getAddress(),
+                await busd.getAddress()
+            );
+
+            // Do NOT mint any tokens for these tests
+        });
 
         it("Should revert on insufficient balance", async function () {
-            // First burn all tokens from the contract
-            const arbitrageAddress = await arbitrage.getAddress();
-            const currentBalance = await usdt.balanceOf(arbitrageAddress);
-            await usdt.connect(owner).transfer(owner.address, currentBalance);
-
             const amount = ethers.parseUnits("100", 18);
             await expect(arbitrage.swapOnPancakeSwap(amount))
                 .to.be.revertedWith("Insufficient balance");
